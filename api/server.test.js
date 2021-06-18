@@ -1,7 +1,7 @@
 // Write your tests here
 
 const request = require('supertest');
-const db = require('../../data/db-config');
+const db = require('../data/dbConfig');
 const server = require('./server');
 
 const joke1 = {
@@ -19,7 +19,7 @@ const joke3 = {
 
 test('sanity', () => {
 	expect(true).toBeTruthy();
-	expect(process.env.DB_ENV).toBe('testing');
+	expect(process.env.NODE_ENV).toBe('testing');
 });
 
 beforeAll(async () => {
@@ -28,13 +28,13 @@ beforeAll(async () => {
 });
 beforeEach(async () => {
 	await db('users').truncate();
-	await db.seed.run();
+	// await db.seed.run();
 });
 afterAll(async () => {
 	await db.destroy();
 });
 
-describe('User Functions', () => {
+describe('Register Functions', () => {
 	describe('create new user', () => {
 		it('adds user to the db', async () => {
 			// let jokes;
@@ -52,7 +52,7 @@ describe('User Functions', () => {
 		});
 	});
 
-	describe('Login returning user', () => {
+	describe('Login functions', () => {
 		it('deletes joke from the db', async () => {
 			// const [id] = await db('jokes').insert(joke1);
 			// let joke = await db('jokes').where({ id }).first();
