@@ -5,10 +5,10 @@ const Auth = require('../auth/auth-model.js');
 
 const {
 	checkUsernameExists,
-	validateUserName
+	validateCredentials
 } = require('../middleware/middleware');
 
-router.post('/register', validateUserName, async (req, res, next) => {
+router.post('/register', checkUsernameExists, async (req, res, next) => {
 	const { username, password } = req.body;
 	let user = { username, password };
 
@@ -23,8 +23,6 @@ router.post('/register', validateUserName, async (req, res, next) => {
 			res.status(201).json(newUser);
 		})
 		.catch(next);
-
-	// res.end('implement register, please!');
 	/*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -52,10 +50,31 @@ router.post('/register', validateUserName, async (req, res, next) => {
   */
 });
 
-// router.post('/login', (req, res) => {
-router.post('/login', checkUsernameExists, (req, res, next) => {
-	res.end('implement login, please!');
-	/*
+router.post(
+	'/login',
+	validateCredentials,
+
+	(req, res, next) => {
+		const { username, user_id } = req.user;
+
+		if (bcrypt.compareSync(req.body.password, req.user.password)) {
+			const token = tokenBuilder({
+				user_id,
+				username
+			});
+			res.status(200).json({
+				message: `$welcome, ${username}!`,
+				token
+			});
+		} else {
+			next({
+				status: 401,
+				message: 'invalid credentials'
+			});
+		}
+		// res.end('implement login, please!');
+
+		/*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
 
@@ -78,6 +97,7 @@ router.post('/login', checkUsernameExists, (req, res, next) => {
     4- On FAILED login due to `username` not existing in the db, or `password` being incorrect,
       the response body should include a string exactly as follows: "invalid credentials".
   */
-});
+	}
+);
 
 module.exports = router;
