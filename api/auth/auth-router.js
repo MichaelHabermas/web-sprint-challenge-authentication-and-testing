@@ -63,7 +63,7 @@ router.post(
 				username
 			});
 			res.status(200).json({
-				message: `$welcome, ${username}!`,
+				message: `welcome, ${username}`,
 				token
 			});
 		} else {
