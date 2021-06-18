@@ -1,13 +1,27 @@
 const bcrypt = require('bcryptjs');
 const router = require('express').Router();
-const { validateUsername } = require('../middleware/middleware');
-const { JWT_SECRET } = require('../secrets');
+const {
+	checkUsernameExists,
+	validateUserName
+} = require('../middleware/middleware');
 const tokenBuilder = require('./token-builder');
-// const Jokes = require('../jokes/jokes-model.js');
+const Auth = require('../auth/auth-model.js');
 
-router.post('/register', validateUsername, (req, res) => {
+// router.post('/register', async (req, res, next) => {
+router.post('/register', validateUserName, async (req, res) => {
 	const { username, password } = req.body;
 	let user = { username, password };
+
+	// encrypt the password
+	const rounds = process.env.BCRYPT_ROUNDS || 6;
+	const hash = bcrypt.hashSync(user.password, rounds);
+	user.password = hash;
+
+	Auth.add(user)
+		.then(newUser => {
+			res.status(201).json(newUser);
+		})
+		.catch(next);
 
 	res.end('implement register, please!');
 	/*
@@ -38,6 +52,7 @@ router.post('/register', validateUsername, (req, res) => {
 });
 
 router.post('/login', (req, res) => {
+	// router.post('/login', checkUsernameExists, (req, res) => {
 	res.end('implement login, please!');
 	/*
     IMPLEMENT
