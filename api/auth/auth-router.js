@@ -1,6 +1,14 @@
+const bcrypt = require('bcryptjs');
 const router = require('express').Router();
+const { validateUsername } = require('../middleware/middleware');
+const { JWT_SECRET } = require('../secrets');
+const tokenBuilder = require('./token-builder');
+// const Jokes = require('../jokes/jokes-model.js');
 
-router.post('/register', (req, res) => {
+router.post('/register', validateUsername, (req, res) => {
+	const { username, password } = req.body;
+	let user = { username, password };
+
 	res.end('implement register, please!');
 	/*
     IMPLEMENT
@@ -9,7 +17,7 @@ router.post('/register', (req, res) => {
 
     1- In order to register a new account the client must provide `username` and `password`:
       {
-        "username": "Captain Marvel", // must not exist already in the `users` table
+        "username": "Captain Marvel", // must not exist already in the `jokes` table
         "password": "foobar"          // needs to be hashed before it's saved
       }
 
