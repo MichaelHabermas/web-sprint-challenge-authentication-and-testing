@@ -61,11 +61,11 @@ router.post(
 	validateCredentials,
 	checkUsernameExists,
 	(req, res, next) => {
-		const { username, user_id } = req.user;
+		const { username, password, id } = req.user;
 
-		if (bcrypt.compareSync(req.body.password, req.user.password)) {
+		if (bcrypt.compareSync(password, req.validUser.password)) {
 			const token = tokenBuilder({
-				user_id,
+				id,
 				username
 			});
 			res.status(200).json({

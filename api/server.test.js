@@ -3,7 +3,6 @@
 const request = require('supertest');
 const db = require('../../data/db-config');
 const server = require('./server');
-// const Jokes = require('./jokes-model');
 
 const joke1 = {
 	id: '0189hNRf2g',
@@ -28,16 +27,16 @@ beforeAll(async () => {
 	await db.migrate.latest();
 });
 beforeEach(async () => {
-	await db('jokes').truncate();
+	await db('users').truncate();
 	await db.seed.run();
 });
 afterAll(async () => {
 	await db.destroy();
 });
 
-describe('Joke Model Functions', () => {
-	describe('create joke', () => {
-		it('adds joke to the db', async () => {
+describe('User Functions', () => {
+	describe('create new user', () => {
+		it('adds user to the db', async () => {
 			// let jokes;
 			// await Users.create(user);
 			// jokes = await db('jokes');
@@ -47,13 +46,13 @@ describe('Joke Model Functions', () => {
 			// expect(jokes).toHaveLength(15);
 		});
 
-		it('returns the correct joke', async () => {
+		it('returns the correct user', async () => {
 			// const joke = await Jokes.create(joke1);
 			// expect(joke).toMatchObject({ name: 'Betty', budget: 40000 });
 		});
 	});
 
-	describe('DELETE joke', () => {
+	describe('Login returning user', () => {
 		it('deletes joke from the db', async () => {
 			// const [id] = await db('jokes').insert(joke1);
 			// let joke = await db('jokes').where({ id }).first();
