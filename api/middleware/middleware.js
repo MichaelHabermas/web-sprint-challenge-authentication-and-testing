@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
-const Auth = require('../auth/auth-model');
+const Users = require('../users/users-model');
 
 const checkUsernameExists = async (req, res, next) => {
 	const { username } = req.body;
-	const [user] = await Auth.findBy({ username });
+	const [user] = await Users.findBy({ username });
 	if (user) {
 		next({ status: 401, message: 'username taken' });
 	} else {

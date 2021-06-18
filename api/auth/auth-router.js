@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const router = require('express').Router();
 const tokenBuilder = require('./token-builder');
-const Auth = require('../auth/auth-model.js');
+const Users = require('../users/users-model.js');
 
 const {
 	checkUsernameExists,
@@ -18,7 +18,7 @@ router.post('/register', checkUsernameExists, async (req, res, next) => {
 	user.password = hash;
 
 	// add user to the db
-	Auth.addUser(user)
+	Users.addUser(user)
 		.then(newUser => {
 			res.status(201).json(newUser);
 		})
