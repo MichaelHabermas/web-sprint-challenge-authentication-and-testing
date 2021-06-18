@@ -1,15 +1,15 @@
 const db = require('../../data/dbConfig.js');
 
 const findBy = filter => {
-	return db('auth').where({ filter }).first();
+	return db('users').where({ filter }).first();
 };
 
 const findById = id => {
-	return db('auth').where({ id }).first();
+	return db('users').where({ id }).first();
 };
 
 async function addUser({ username, password }) {
-	const [user_id] = await db('auth').insert({
+	const [user_id] = await db('users').insert({
 		username: username,
 		password: password
 	});
