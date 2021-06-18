@@ -5,25 +5,30 @@ const Users = require('../users/users-model.js');
 
 const {
 	checkUsernameExists,
-	validateCredentials
+	validateCredentials,
+	checkUsernameUnique
 } = require('../middleware/middleware');
 
-router.post('/register', checkUsernameExists, async (req, res, next) => {
-	const { username, password } = req.body;
-	let user = { username, password };
+router.post(
+	'/register',
+	validateCredentials,
+	checkUsernameUnique,
+	async (req, res, next) => {
+		// const { username, password } = req.user;
+		let user = req.user;
 
-	// encrypt the password
-	const rounds = process.env.BCRYPT_ROUNDS || 6;
-	const hash = bcrypt.hashSync(user.password, rounds);
-	user.password = hash;
+		// encrypt the password
+		const rounds = process.env.BCRYPT_ROUNDS || 6;
+		const hash = bcrypt.hashSync(user.password, rounds);
+		user.password = hash;
 
-	// add user to the db
-	Users.addUser(user)
-		.then(newUser => {
-			res.status(201).json(newUser);
-		})
-		.catch(next);
-	/*
+		// add user to the db
+		Users.addUser(user)
+			.then(newUser => {
+				res.status(201).json(newUser);
+			})
+			.catch(next);
+		/*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
     DO NOT EXCEED 2^8 ROUNDS OF HASHING!
@@ -48,12 +53,13 @@ router.post('/register', checkUsernameExists, async (req, res, next) => {
     4- On FAILED registration due to the `username` being taken,
       the response body should include a string exactly as follows: "username taken".
   */
-});
+	}
+);
 
 router.post(
 	'/login',
 	validateCredentials,
-
+	checkUsernameExists,
 	(req, res, next) => {
 		const { username, user_id } = req.user;
 
