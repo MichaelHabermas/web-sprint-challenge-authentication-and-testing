@@ -7,8 +7,7 @@ const {
 const tokenBuilder = require('./token-builder');
 const Auth = require('../auth/auth-model.js');
 
-// router.post('/register', async (req, res, next) => {
-router.post('/register', validateUserName, async (req, res) => {
+router.post('/register', validateUserName, async (req, res, next) => {
 	const { username, password } = req.body;
 	let user = { username, password };
 
@@ -51,8 +50,8 @@ router.post('/register', validateUserName, async (req, res) => {
   */
 });
 
-router.post('/login', (req, res) => {
-	// router.post('/login', checkUsernameExists, (req, res) => {
+// router.post('/login', (req, res) => {
+router.post('/login', checkUsernameExists, (req, res, next) => {
 	res.end('implement login, please!');
 	/*
     IMPLEMENT
