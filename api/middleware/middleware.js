@@ -14,7 +14,6 @@ const checkUsernameExists = async (req, res, next) => {
 
 const validateUserName = async (req, res, next) => {
 	let { username } = req.body;
-	const [user] = await Auth.findBy({ username });
 	if (!username || username.trim() === '') {
 		next({ status: 400, message: 'Invalid username' });
 	} else {
